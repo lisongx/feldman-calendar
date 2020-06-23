@@ -24,6 +24,7 @@ def parse_event(p):
     content = list(texts[-1].children)
     date, location = line1.split("*")
     date = parse_date(date)
+    location = location.strip()
     programme = [p.strip() for p in content[0].contents if is_text(p)]
     performer = None
     venue = None
@@ -40,10 +41,11 @@ def parse_event(p):
             source = content[8].attrs["href"]
 
     return {
+        'uid': "%s-%s" % (date.date(), location.lower()
         "date": date,
         "performer": performer,
         "venue": venue,
-        "location": location.strip(),
+        "location": location,
         "programme": programme,
         "source": source,
     }
