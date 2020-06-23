@@ -68,10 +68,11 @@ def gen_calendar_data(events):
     for event in events:
         e = Event()
         e.name = "Morton feldman performance at %s" % event["location"]
-        e.description = "Peformer: %s\n\nProgramme:\n%s\nVenue: %s" % (
+        e.description = "Peformer: %s\n\nProgramme:\n%s\n\nVenue: %s\n\nSource:%s" % (
             event["performer"],
             "\n".join(event["programme"]),
             event["venue"],
+            event["source"],
         )
         e.location = event["location"]
         e.begin = event["date"].date()

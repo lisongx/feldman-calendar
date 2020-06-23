@@ -52,7 +52,7 @@ app = create_app()
 
 
 @app.route("/MortonFeldman.ics", methods=["GET"])
-@cache.cached(timeout=CACHE_TIME)
+@cache.cached(timeout=CACHE_TIME, key_prefix='v1')
 def ics():
     return Response(str(get_latest_calendar()), mimetype="text/calendar")
 
