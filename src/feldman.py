@@ -22,7 +22,7 @@ def parse_event(p):
     texts = list(p.children)
     line1 = texts[0].text.strip()
     content = list(texts[-1].children)
-    date, location = line1.split('*')
+    date, location = line1.split("*")
     date = parse_date(date)
     programme = [p.strip() for p in content[0].contents if is_text(p)]
     performer = None
@@ -36,24 +36,24 @@ def parse_event(p):
             if venue is None:
                 venue = line.strip()
                 continue
-        if line.name == 'a':
-            source = content[8].attrs['href']
+        if line.name == "a":
+            source = content[8].attrs["href"]
 
     return {
-        'date': date,
-        'performer': performer,
-        'venue': venue,
-        'location': location.strip(),
-        'programme': programme,
-        'source': source
+        "date": date,
+        "performer": performer,
+        "venue": venue,
+        "location": location.strip(),
+        "programme": programme,
+        "source": source,
     }
 
 
 def parse_events_from_html(body):
-    soup = BeautifulSoup(body, 'html.parser')
+    soup = BeautifulSoup(body, "html.parser")
     events = []
     for child in soup.body.children:
-        if child.name == 'p':
+        if child.name == "p":
             try:
                 event = parse_event(child)
                 events.append(event)
@@ -67,15 +67,15 @@ def gen_calendar_data(events):
 
     for event in events:
         e = Event()
-        e.name =  "Morton feldman performance at %s" % event['location']
-        e.description =  "Peformer: %s\n\nProgramme:\n%s\nVenue: %s" % (
-            event['performer'],
-            '\n'.join(event['programme']),
-            event['venue']
+        e.name = "Morton feldman performance at %s" % event["location"]
+        e.description = "Peformer: %s\n\nProgramme:\n%s\nVenue: %s" % (
+            event["performer"],
+            "\n".join(event["programme"]),
+            event["venue"],
         )
-        e.location = event['location']
-        e.begin = event['date'].date()
-        e.url = event['source']
+        e.location = event["location"]
+        e.begin = event["date"].date()
+        e.url = event["source"]
         e.make_all_day()
         c.events.add(e)
         c.events
@@ -86,6 +86,7 @@ def get_latest_calendar():
     body = get_page_content()
     events = parse_events_from_html(body)
     return gen_calendar_data(events)
+
 
 if __name__ == "__main__":
     main()
