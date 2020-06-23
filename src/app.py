@@ -20,7 +20,7 @@ def create_app():
         cache.init_app(
             app,
             config={
-                "CACHE_KEY_PREFIX": "v5",
+                "CACHE_KEY_PREFIX": "v6",
                 "CACHE_TYPE": "saslmemcached",
                 "CACHE_MEMCACHED_SERVERS": cache_servers.split(","),
                 "CACHE_MEMCACHED_USERNAME": cache_user,
@@ -55,7 +55,7 @@ app = create_app()
 @app.route("/MortonFeldman.ics", methods=["GET"])
 @cache.cached(timeout=CACHE_TIME)
 def ics():
-    return Response(get_latest_calendar().to_ical(), mimetype="text/calendar")
+    return Response(get_latest_calendar().to_ical().decode('utf-8'), mimetype="text/calendar")
 
 
 @app.route("/")
