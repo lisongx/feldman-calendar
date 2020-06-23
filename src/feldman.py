@@ -90,4 +90,6 @@ def get_latest_calendar():
 
 
 if __name__ == "__main__":
-    main()
+    c = get_latest_calendar()
+    with open('Feldman.ics', 'w') as f:
+        f.write(str(c))
