@@ -75,10 +75,10 @@ Programme:
 
 Venue: %s
 """ % (
+        event["source"],
         event["performer"],
         "\n".join(event["programme"]),
         event["venue"],
-        event["source"],
     )
 
 
