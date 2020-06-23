@@ -20,7 +20,7 @@ def create_app():
         cache.init_app(
             app,
             config={
-                "CACHE_KEY_PREFIX": "v2",
+                "CACHE_KEY_PREFIX": "v3",
                 "CACHE_TYPE": "saslmemcached",
                 "CACHE_MEMCACHED_SERVERS": cache_servers.split(","),
                 "CACHE_MEMCACHED_USERNAME": cache_user,
