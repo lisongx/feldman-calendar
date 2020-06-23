@@ -1,8 +1,9 @@
 import requests
 import bs4
+
 from bs4 import BeautifulSoup
 from dateparser import parse as parse_date
-from ics import Calendar, Event
+from icalendar import Calendar, Event
 
 
 URL = "https://www.cnvill.net/mfperfs.htm"
@@ -41,7 +42,7 @@ def parse_event(p):
             source = content[8].attrs["href"]
 
     return {
-        'uid': "%s-%s" % (str(date.date()), location.lower())
+        "uid": "%s-%s" % (str(date.date()), location.lower().replace(" ", "/")),
         "date": date,
         "performer": performer,
         "venue": venue,
@@ -66,22 +67,30 @@ def parse_events_from_html(body):
 
 def gen_calendar_data(events):
     c = Calendar()
+    c.add("prodid", "-//Morton Feldman Forthcoming Performances//notimportant.org//")
+    c.add("version", "1.0")
+    c.add("x-wr-calname", "Morton Feldman Forthcoming Performances")
+    c.add("x-original-url", "http://feldman.notimportant.org/")
+    c.add("method", "PUBLISH")
 
     for event in events:
         e = Event()
-        e.name = "Morton Feldman: %s" % event["location"]
-        e.description = "Peformer: %s\n\nProgramme:\n%s\n\nVenue: %s\n\nSource: %s" % (
-            event["performer"],
-            "\n".join(event["programme"]),
-            event["venue"],
-            event["source"],
+        e.add("summary", "Morton Feldman: %s" % event["location"])
+        e.add(
+            "description",
+            "Peformer: %s\n\nProgramme:\n%s\n\nVenue: %s\n\nSource: %s"
+            % (
+                event["performer"],
+                "\n".join(event["programme"]),
+                event["venue"],
+                event["source"],
+            ),
         )
-        e.location = event["location"]
-        e.begin = event["date"].date()
-        e.url = event["source"]
-        e.make_all_day()
-        c.events.add(e)
-        c.events
+        e.add("location", event["location"])
+        e.add("dtstart", event["date"].date())
+        e.add("url", event["source"])
+        e.add("uid", event["uid"])
+        c.add_component(e)
     return c
 
 
@@ -93,5 +102,5 @@ def get_latest_calendar():
 
 if __name__ == "__main__":
     c = get_latest_calendar()
-    with open('Feldman.ics', 'w') as f:
-        f.write(str(c))
+    with open("Feldman.ics", "w") as f:
+        f.write(c.to_ical().decode("utf-8"))
