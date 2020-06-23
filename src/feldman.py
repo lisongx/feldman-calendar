@@ -41,7 +41,7 @@ def parse_event(p):
             source = content[8].attrs["href"]
 
     return {
-        'uid': "%s-%s" % (date.date(), location.lower()
+        'uid': "%s-%s" % (str(date.date()), location.lower())
         "date": date,
         "performer": performer,
         "venue": venue,
