@@ -92,7 +92,7 @@ def gen_calendar_data(events):
 
     for event in events:
         e = Event()
-        e.add("summary", "Morton Feldman: %s" % event["location"])
+        e.add("summary", "Morton Feldman: %s" % event["venue"])
         e.add("location", event["location"])
         e.add("dtstart", event["date"].date())
         e.add("url", vUri(event["source"]))
