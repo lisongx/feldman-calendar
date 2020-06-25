@@ -65,8 +65,7 @@ def parse_events_from_html(body):
 
 
 def get_event_desc(event):
-    return """
-Source: %s
+    return """Source: %s
 
 Performers: %s
 
